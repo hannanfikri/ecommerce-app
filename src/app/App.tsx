@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout } from "./app/Layout";
 import {
   Home,
   Products,
@@ -9,9 +8,10 @@ import {
   Checkout,
   Wishlist,
   NotFound,
-} from "./app/pages";
+} from "./pages";
+import { Layout } from "./Layout";
 
-export const App = () => {
+export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
