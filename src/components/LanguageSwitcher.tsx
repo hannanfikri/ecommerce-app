@@ -9,7 +9,7 @@ export const LanguageSwitcher = ({ className = "" }: LanguageSwitcherProps) => {
 
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "my", name: "Bahasa Malaysia", flag: "��" },
+    { code: "my", name: "Bahasa Malaysia", flag: "🇲🇾" },
   ];
 
   const currentLanguage =
