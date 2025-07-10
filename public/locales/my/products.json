@@ -1,0 +1,23 @@
+{
+  "filters": "Penapis",
+  "categories": "Kategori",
+  "priceRange": "Julat Harga",
+  "under25": "Bawah $25",
+  "range25to50": "$25 - $50",
+  "range50to100": "$50 - $100",
+  "over100": "Melebihi $100",
+  "rating": "Penilaian",
+  "starsOrMore": "+ Bintang",
+  "allProducts": "Semua Produk",
+  "searchResults": "Hasil carian untuk: \"{{query}}\"",
+  "sortBy": "Susun mengikut: {{type}}",
+  "featured": "Pilihan",
+  "priceLowToHigh": "Harga: Rendah ke Tinggi",
+  "priceHighToLow": "Harga: Tinggi ke Rendah",
+  "customerRating": "Penilaian Pelanggan",
+  "newest": "Terbaharu",
+  "addToCart": "Tambah ke Troli",
+  "reviews": "({{count}} ulasan)",
+  "previous": "Sebelumnya",
+  "next": "Seterusnya"
+}

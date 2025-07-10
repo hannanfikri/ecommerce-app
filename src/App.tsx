@@ -11,6 +11,9 @@ import {
   NotFound,
 } from "./app/pages";
 
+// Initialize i18n
+import "./i18n";
+
 export const App = () => {
   return (
     <BrowserRouter>
