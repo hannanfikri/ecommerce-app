@@ -2,7 +2,7 @@ export const Wishlist = () => {
   // Mock wishlist items
   const wishlistItems = [
     {
-      id: 1,
+      id: "1",
       name: "Premium Wireless Earbuds",
       price: 149.99,
       originalPrice: 199.99,
@@ -11,7 +11,7 @@ export const Wishlist = () => {
       rating: 4.5,
     },
     {
-      id: 2,
+      id: "2",
       name: "Smart Fitness Tracker",
       price: 89.99,
       originalPrice: 119.99,
@@ -20,7 +20,7 @@ export const Wishlist = () => {
       rating: 4.2,
     },
     {
-      id: 3,
+      id: "3",
       name: "Portable Bluetooth Speaker",
       price: 79.99,
       originalPrice: 99.99,
@@ -29,7 +29,7 @@ export const Wishlist = () => {
       rating: 4.7,
     },
     {
-      id: 4,
+      id: "4",
       name: "Wireless Charging Pad",
       price: 29.99,
       originalPrice: 39.99,
