@@ -1,0 +1,23 @@
+{
+  "filters": "Filters",
+  "categories": "Categories",
+  "priceRange": "Price Range",
+  "under25": "Under $25",
+  "range25to50": "$25 - $50",
+  "range50to100": "$50 - $100",
+  "over100": "Over $100",
+  "rating": "Rating",
+  "starsOrMore": "+ Stars",
+  "allProducts": "All Products",
+  "searchResults": "Search results for: \"{{query}}\"",
+  "sortBy": "Sort by: {{type}}",
+  "featured": "Featured",
+  "priceLowToHigh": "Price: Low to High",
+  "priceHighToLow": "Price: High to Low",
+  "customerRating": "Customer Rating",
+  "newest": "Newest",
+  "addToCart": "Add to Cart",
+  "reviews": "({{count}} reviews)",
+  "previous": "Previous",
+  "next": "Next"
+}
