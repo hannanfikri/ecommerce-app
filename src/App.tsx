@@ -12,7 +12,7 @@ import {
 } from "./app/pages";
 
 // Initialize i18n
-import "./i18n";
+import "./i18n/config";
 
 export const App = () => {
   return (

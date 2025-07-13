@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { getAvailableLanguages, changeLanguage } from "../i18n/config";
 
 interface LanguageSwitcherProps {
   className?: string;
@@ -7,16 +8,21 @@ interface LanguageSwitcherProps {
 export const LanguageSwitcher = ({ className = "" }: LanguageSwitcherProps) => {
   const { i18n } = useTranslation();
 
+  const supportedLanguages = getAvailableLanguages();
   const languages = [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "my", name: "Bahasa Malaysia", flag: "🇲🇾" },
+    { code: "en", name: supportedLanguages.en, flag: "🇺🇸" },
+    { code: "my", name: supportedLanguages.my, flag: "🇲🇾" },
   ];
 
   const currentLanguage =
     languages.find((lang) => lang.code === i18n.language) || languages[0];
 
-  const handleLanguageChange = (languageCode: string) => {
-    i18n.changeLanguage(languageCode);
+  const handleLanguageChange = async (languageCode: string) => {
+    try {
+      await changeLanguage(languageCode);
+    } catch (error) {
+      console.error("Failed to change language:", error);
+    }
   };
 
   return (
