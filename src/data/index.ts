@@ -1,4 +1,5 @@
-// Data exports will go here
-// Example: export { productApi } from './api/products';
-// Example: export type { Product, User } from './types';
-// Example: export { useProducts } from './hooks/useProducts';
+// API exports
+export * from "./apis";
+
+// Re-export the main API object for convenience
+export { api } from "./apis";

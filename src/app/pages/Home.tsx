@@ -1,7 +1,10 @@
 import { useTranslation } from "react-i18next";
+import { useFeaturedProducts } from "../../hooks";
 
 export const Home = () => {
   const { t } = useTranslation("home");
+  const { products: featuredProducts, loading, error } = useFeaturedProducts(4);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">{t("welcome")}</h1>
@@ -36,26 +39,98 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* Featured Products Section Placeholder */}
+      {/* Featured Products Section */}
       <section>
         <h2 className="text-2xl font-bold mb-6">{t("featuredProducts")}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((item) => (
-            <div
-              key={item}
-              className="bg-white border rounded-lg p-4 shadow-sm"
-            >
-              <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
-              <h3 className="font-semibold mb-2">
-                {t("product")} {item}
-              </h3>
-              <p className="text-gray-600 text-sm mb-2">
-                {t("productDescription")}
-              </p>
-              <p className="text-lg font-bold text-blue-600">$99.99</p>
-            </div>
-          ))}
-        </div>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            Error loading products: {error}
+          </div>
+        )}
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((item) => (
+              <div
+                key={item}
+                className="bg-white border rounded-lg p-4 shadow-sm animate-pulse"
+              >
+                <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded mb-2 w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : featuredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {featuredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-lg transition-shadow"
+              >
+                <div className="bg-gray-200 h-48 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                  {product.images && product.images[0] ? (
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        const placeholder =
+                          img.nextElementSibling as HTMLElement;
+                        img.style.display = "none";
+                        if (placeholder) placeholder.style.display = "flex";
+                      }}
+                    />
+                  ) : null}
+                  <div
+                    className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
+                    style={{ display: product.images?.[0] ? "none" : "flex" }}
+                  >
+                    No Image
+                  </div>
+                </div>
+                <h3 className="font-semibold mb-2 line-clamp-2">
+                  {product.name}
+                </h3>
+                <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                  {product.description}
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-bold text-blue-600">
+                    ${product.price.toFixed(2)}
+                  </p>
+                  {product.rating > 0 && (
+                    <div className="flex items-center text-sm text-gray-500">
+                      <span className="text-yellow-400 mr-1">★</span>
+                      {product.rating.toFixed(1)}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((item) => (
+              <div
+                key={item}
+                className="bg-white border rounded-lg p-4 shadow-sm"
+              >
+                <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
+                <h3 className="font-semibold mb-2">
+                  {t("product")} {item}
+                </h3>
+                <p className="text-gray-600 text-sm mb-2">
+                  {t("productDescription")}
+                </p>
+                <p className="text-lg font-bold text-blue-600">$99.99</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

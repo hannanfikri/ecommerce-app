@@ -13,8 +13,7 @@ export const supportedLanguages = {
 // Default namespace list
 export const namespaces = ALL_NAMESPACES;
 
-// Resources configuration - you can include initial translations here
-// or rely entirely on the backend loader
+// Resources configuration
 const resources = allTranslations;
 
 i18n
