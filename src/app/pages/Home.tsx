@@ -63,7 +63,7 @@ export const Home = () => {
               </div>
             ))}
           </div>
-        ) : featuredProducts.length > 0 ? (
+        ) : featuredProducts?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {featuredProducts.map((product) => (
               <div
