@@ -1,11 +1,49 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import { LanguageSwitcher } from "../LanguageSwitcher";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useTranslation("header");
+  const location = useLocation();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Close dropdown when screen size changes to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        // md breakpoint
+        setIsDropdownOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Helper function to check if current path matches navigation item
+  const isActiveRoute = (href: string) => {
+    return location.pathname === href || 
+           (href !== "/categories" && location.pathname.startsWith(href));
+  };
+
+  // Shared navigation items
+  const navigationItems = [
+    { key: "allCategories", href: "/categories", isBold: true },
+    { key: "electronics", href: "/categories/electronics" },
+    { key: "fashion", href: "/categories/fashion" },
+    { key: "homeGarden", href: "/categories/home-garden" },
+    { key: "sports", href: "/categories/sports" },
+    { key: "books", href: "/categories/books" },
+  ];
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -15,15 +53,95 @@ export const Header = () => {
           <div>
             <span>{t("freeShipping")}</span>
           </div>
+
           <div className="flex items-center space-x-4">
-            <Link to="/help" className="hover:text-blue-600">
-              {t("help")}
-            </Link>
-            <Link to="/account" className="hover:text-blue-600">
-              {t("myAccount")}
-            </Link>
-            <span>📞 {t("phone")}</span>
-            <LanguageSwitcher />
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link to="/help" className="hover:text-blue-600">
+                {t("help")}
+              </Link>
+              <Link to="/account" className="hover:text-blue-600">
+                {t("myAccount")}
+              </Link>
+              <span>{t("phone")}</span>
+              <LanguageSwitcher />
+            </div>
+
+            {/* Mobile Dropdown - Only visible on mobile */}
+            <div className="md:hidden">
+              <DropdownMenu
+                open={isDropdownOpen}
+                onOpenChange={setIsDropdownOpen}
+              >
+                <DropdownMenuTrigger asChild>
+                  <button className="p-2 rounded-full shadow-2xl focus-visible:outline-none focus-visible:ring-0 hover:cursor-pointer">
+                    <HamburgerMenuIcon className="size-4" color="gray" />
+                  </button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuPortal>
+                  <DropdownMenuContent
+                    className="min-w-[180px] max-w-[calc(100vw-2rem)] w-auto rounded-md bg-white p-2 shadow-lg border border-gray-200"
+                    sideOffset={5}
+                    align="end"
+                  >
+                    {/* Navigation Items */}
+                    {navigationItems.map((item) => (
+                      <DropdownMenuItem key={item.key} asChild>
+                        <Link
+                          to={item.href}
+                          className={`block px-3 py-2 text-sm hover:bg-gray-50 rounded ${
+                            item.isBold ? "font-medium" : ""
+                          } ${
+                            isActiveRoute(item.href)
+                              ? "font-bold text-blue-600 bg-blue-50"
+                              : ""
+                          }`}
+                        >
+                          {t(item.key)}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+
+                    {/* Help & Account */}
+                    <div className="border-t border-gray-100 mt-2 pt-2">
+                      <DropdownMenuItem asChild>
+                        <Link
+                          to="/help"
+                          className="block px-3 py-2 text-sm hover:bg-gray-50 rounded"
+                        >
+                          {t("help")}
+                        </Link>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem asChild>
+                        <Link
+                          to="/account"
+                          className="block px-3 py-2 text-sm hover:bg-gray-50 rounded"
+                        >
+                          {t("myAccount")}
+                        </Link>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem>
+                        <span className="block px-3 py-2 text-sm">
+                          {t("phone")}
+                        </span>
+                      </DropdownMenuItem>
+                    </div>
+
+                    {/* Sign In Button */}
+                    <div className="border-t border-gray-100 mt-2 pt-2">
+                      <DropdownMenuItem asChild>
+                        <button className="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition-colors text-sm">
+                          {t("signIn")}
+                        </button>
+                      </DropdownMenuItem>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenuPortal>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
 
@@ -34,8 +152,8 @@ export const Header = () => {
             🛒 ShopEase
           </Link>
 
-          {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
+          {/* Search Bar - Hidden on mobile */}
+          <div className="flex-1 max-w-2xl mx-8 hidden md:block">
             <div className="relative">
               <input
                 type="text"
@@ -73,47 +191,27 @@ export const Header = () => {
               </button>
             </div>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden ml-4"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span className="text-2xl">☰</span>
-          </button>
         </div>
 
-        {/* Navigation */}
+        {/* Desktop Navigation */}
         <nav className="py-3 border-t">
           <div className="flex items-center justify-between">
             <div className="hidden md:flex items-center space-x-8">
-              <Link
-                to="/categories"
-                className="hover:text-blue-600 font-medium"
-              >
-                {t("allCategories")}
-              </Link>
-              <Link
-                to="/categories/electronics"
-                className="hover:text-blue-600"
-              >
-                {t("electronics")}
-              </Link>
-              <Link to="/categories/fashion" className="hover:text-blue-600">
-                {t("fashion")}
-              </Link>
-              <Link
-                to="/categories/home-garden"
-                className="hover:text-blue-600"
-              >
-                {t("homeGarden")}
-              </Link>
-              <Link to="/categories/sports" className="hover:text-blue-600">
-                {t("sports")}
-              </Link>
-              <Link to="/categories/books" className="hover:text-blue-600">
-                {t("books")}
-              </Link>
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.key}
+                  to={item.href}
+                  className={`hover:text-blue-600 ${
+                    item.isBold ? "font-medium" : ""
+                  } ${
+                    isActiveRoute(item.href)
+                      ? "font-bold text-blue-600 border-b-2 border-blue-600"
+                      : ""
+                  }`}
+                >
+                  {t(item.key)}
+                </Link>
+              ))}
             </div>
             <div className="hidden md:flex items-center space-x-4 text-sm">
               <span className="text-red-600 font-medium">🔥 {t("sale")}</span>
@@ -122,46 +220,6 @@ export const Header = () => {
               </span>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t pt-4">
-              <div className="flex flex-col space-y-3">
-                <Link
-                  to="/categories"
-                  className="hover:text-blue-600 font-medium"
-                >
-                  {t("allCategories")}
-                </Link>
-                <Link
-                  to="/categories/electronics"
-                  className="hover:text-blue-600"
-                >
-                  {t("electronics")}
-                </Link>
-                <Link to="/categories/fashion" className="hover:text-blue-600">
-                  {t("fashion")}
-                </Link>
-                <Link
-                  to="/categories/home-garden"
-                  className="hover:text-blue-600"
-                >
-                  {t("homeGarden")}
-                </Link>
-                <Link to="/categories/sports" className="hover:text-blue-600">
-                  {t("sports")}
-                </Link>
-                <Link to="/categories/books" className="hover:text-blue-600">
-                  {t("books")}
-                </Link>
-                <div className="pt-3 border-t">
-                  <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    {t("signIn")}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </nav>
       </div>
     </header>
